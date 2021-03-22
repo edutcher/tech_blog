@@ -18,4 +18,4 @@ Comment.belongsTo(User, {
     foreignKey: 'user_id'
 })
 
-module.exports = { User };
+module.exports = { User, Post, Comment };

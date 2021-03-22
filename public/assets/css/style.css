@@ -1,0 +1,12 @@
+nav {
+    margin-bottom: 50px;
+}
+
+button {
+    margin-top: 10px;
+}
+
+.userForm,
+.postForm {
+    width: 40%;
+}
