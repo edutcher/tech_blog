@@ -5,7 +5,7 @@
 {{/if}}
 
 
-<form action="/api/users/login" method="post">
+<form id="loginForm">
   <div class="form-group">
     <label for="name">User Name</label>
     <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
@@ -20,3 +20,5 @@
   <a href="/newUser">Create Account</a>
 </form>
 </div>
+
+<script src="/assets/js/login.js"></script>

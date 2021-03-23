@@ -2,18 +2,18 @@ const router = require('express').Router();
 const { User } = require('../../models');
 
 router.post('/', async(req, res) => {
-        try {
-            let user = await User.create(req.body);
+    try {
+        let user = await User.create(req.body);
 
-            res.status(200).redirect('/login')
-        } catch (err) {
-            console.log(err);
-            res.status(500).send(err);
-        }
+        req.session.message = "Account Created! Please sign in.";
+
+        res.status(200).json(user);
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
     }
-
-
-)
+})
 
 router.post('/login', async(req, res) => {
     try {
@@ -25,6 +25,7 @@ router.post('/login', async(req, res) => {
         });
 
         if (!user) {
+            req.session.message = 'Incorrect info';
             res.status(400).json({ logged_in: false, message: 'Incorrect info' });
             return;
         }
@@ -32,7 +33,9 @@ router.post('/login', async(req, res) => {
         let goodPass = await user.checkPassword(password);
 
         if (!goodPass) {
+            req.session.message = 'Incorrect info';
             res.status(400).json({ logged_in: false, message: 'Incorrect info' });
+
             return;
         }
 
@@ -40,11 +43,9 @@ router.post('/login', async(req, res) => {
             req.session.user_id = user.id;
             req.session.user_name = user.name;
             req.session.logged_in = true;
+            req.session.message = undefined;
 
-            res.render('dashboard', {
-                name: req.session.user_name,
-                title: "dashboard"
-            });
+            res.status(200).json({ logged_in: true });
         });
 
     } catch (err) {

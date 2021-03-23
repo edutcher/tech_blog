@@ -10,9 +10,16 @@ Post.init({
         primaryKey: true,
         autoIncrement: true,
     },
+    title: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
     text: {
         type: DataTypes.TEXT,
         allowNull: false
+    },
+    created_on: {
+        type: DataTypes.DATEONLY,
     },
     user_id: {
         type: DataTypes.INTEGER,

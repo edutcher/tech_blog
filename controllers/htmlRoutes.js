@@ -4,17 +4,14 @@ const withAuth = require('../utils/auth');
 
 router.get('/', async(req, res) => {
     try {
-        const userData = await User.findAll({
-            attributes: { exclude: ['password'] },
-            order: [
-                ['name', 'ASC']
-            ],
+        const postData = await Post.findAll({
+            include: [{ model: User }],
         });
 
-        const users = userData.map((post) => post.get({ plain: true }));
+        const posts = postData.map((post) => post.get({ plain: true }));
 
         res.render('index', {
-            users,
+            posts,
             name: req.session.user_name,
             title: "index",
             logged_in: req.session.logged_in,
@@ -35,6 +32,12 @@ router.get('/dashboard', withAuth, async(req, res) => {
 router.get('/newuser', async(req, res) => {
     res.render('newUser', {
         title: "new user"
+    })
+})
+
+router.get('/newpost', withAuth, async(req, res) => {
+    res.render('newPost', {
+        title: "new post"
     })
 })
 

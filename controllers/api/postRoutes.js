@@ -1,8 +1,19 @@
 const router = require('express').Router();
-const { Post } = require('../../models');
+const { User, Post, Comment } = require('../../models');
 
 router.get('/', async(req, res) => {
+    try {
+        let posts = await Post.findAll({
+            include: [{ model: User }, { model: Comment }]
+        });
 
+        if (!posts) res.status(400).json({ message: "No posts" });
+
+        res.status(200).json(posts);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
 })
 
 router.get('/:id', async(req, res) => {
@@ -10,7 +21,7 @@ router.get('/:id', async(req, res) => {
         let { id } = req.params;
         let post = await Post.findByPk(id);
 
-        if (!post) res.status(400).json({ message: "no post found" });
+        if (!post) res.status(400).json({ message: "No post found" });
 
         res.status(200).json(post);
     } catch (err) {
@@ -21,20 +32,20 @@ router.get('/:id', async(req, res) => {
 
 router.post('/', async(req, res) => {
         if (!req.session.logged_in) {
-            res.render('login', {
-                message: "You must login first",
-                title: "login"
-            });
+            res.status(400).json({ logged_in: false, message: 'Please log in.' });
             return;
         }
+        let now = new Date;
         try {
             let newPost = {
+                title: req.body.title,
                 text: req.body.post,
-                user_id: req.session.user_id
+                user_id: req.session.user_id,
+                created_on: now.toISOString()
             }
-            let user = await Post.create(newPost);
+            let post = await Post.create(newPost);
 
-            res.status(200).json(user);
+            res.status(200).json(post);
         } catch (err) {
             console.log(err);
             res.status(500).send(err);
