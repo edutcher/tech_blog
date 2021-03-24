@@ -14,7 +14,7 @@ router.get('/', async(req, res) => {
         res.render('index', {
             posts,
             name: req.session.user_name,
-            title: "index",
+            title: "Index",
             logged_in: req.session.logged_in,
         });
     } catch (err) {
@@ -37,7 +37,7 @@ router.get('/dashboard', withAuth, async(req, res) => {
         res.render('dashboard', {
             posts,
             name: req.session.user_name,
-            title: "dashboard",
+            title: "Dashboard",
             logged_in: req.session.logged_in
         });
 
@@ -49,9 +49,14 @@ router.get('/dashboard', withAuth, async(req, res) => {
 
 router.get('/post/:id', async(req, res) => {
     try {
-        let post = await Post.findByPk(req.params.id);
+        let postData = await Post.findByPk(req.params.id, {
+            include: [{ model: User }],
+            exlclude: ['password']
+        });
 
-        if (!post) res.status(400).json({ message: "Post not found" });
+        if (!postData) res.status(400).json({ message: "Post not found" });
+
+        const post = postData.get({ plain: true });
 
         res.render('showPost', {
             post,
@@ -68,13 +73,13 @@ router.get('/post/:id', async(req, res) => {
 
 router.get('/newuser', async(req, res) => {
     res.render('newUser', {
-        title: "new user"
+        title: "New User"
     })
 })
 
 router.get('/newpost', withAuth, async(req, res) => {
     res.render('newPost', {
-        title: "new post"
+        title: "New Post"
     })
 })
 
@@ -84,7 +89,7 @@ router.get('/login', (req, res) => {
         return;
     }
     res.render('login', {
-        title: "login"
+        title: "Login"
     });
 });
 

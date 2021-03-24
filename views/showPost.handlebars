@@ -1,6 +1,8 @@
-{{> postCard post}}
 
-{{#if res.session.logged_in}}
+{{> postCardFull post}}
+
+
+{{#if logged_in}}
 <div id="commentForm" class="hidden">
 <form class="newCommentForm">
   <div class="form-group">

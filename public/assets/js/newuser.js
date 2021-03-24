@@ -5,7 +5,6 @@ function addUser() {
     }
     axios.post('/api/users', userInfo)
         .then(res => {
-            console.log(res);
             if (res.status = 200) window.location.href = "/login";
         }).catch(err => {
             console.log(err);
