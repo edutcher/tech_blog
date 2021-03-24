@@ -31,28 +31,46 @@ router.get('/:id', async(req, res) => {
 })
 
 router.post('/', async(req, res) => {
-        if (!req.session.logged_in) {
-            res.status(400).json({ logged_in: false, message: 'Please log in.' });
-            return;
-        }
-        let now = new Date;
-        try {
-            let newPost = {
-                title: req.body.title,
-                text: req.body.post,
-                user_id: req.session.user_id,
-                created_on: now.toISOString()
-            }
-            let post = await Post.create(newPost);
-
-            res.status(200).json(post);
-        } catch (err) {
-            console.log(err);
-            res.status(500).send(err);
-        }
+    if (!req.session.logged_in) {
+        res.status(400).json({ logged_in: false, message: 'Please log in.' });
+        return;
     }
+    let now = new Date;
+    try {
+        let newPost = {
+            title: req.body.title,
+            text: req.body.post,
+            user_id: req.session.user_id,
+            created_on: now.toISOString()
+        }
+        let post = await Post.create(newPost);
 
+        res.status(200).json(post);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+})
 
-)
+router.delete('/:id', async(req, res) => {
+    if (!req.session.logged_in) {
+        res.status(400).json({ logged_in: false, message: 'Please log in.' });
+        return;
+    }
+    try {
+        let { id } = req.params;
+
+        let result = await Post.destroy({
+            where: {
+                id
+            }
+        });
+
+        res.status(200).json(result);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+})
 
 module.exports = router;

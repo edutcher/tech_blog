@@ -4,10 +4,12 @@ nav {
 
 button {
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .userForm,
-.postForm {
+.postForm,
+.commentForm {
     width: 40%;
 }
 
