@@ -56,6 +56,35 @@ router.post('/', async(req, res) => {
     }
 })
 
+router.put('/:id', async(req, res) => {
+    if (!req.session.logged_in) {
+        res.status(400).json({ logged_in: false, message: 'Please log in.' });
+        return;
+    }
+    try {
+
+        let now = new Date;
+        let { id } = req.params;
+        let updatedPost = {
+            title: req.body.title,
+            text: req.body.post,
+            user_id: req.session.user_id,
+            updated_on: now.toISOString()
+        }
+
+        let result = await Post.update(updatedPost, {
+            where: {
+                id
+            }
+        });
+
+        res.status(200).json(result);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+})
+
 router.delete('/:id', async(req, res) => {
     if (!req.session.logged_in) {
         res.status(400).json({ logged_in: false, message: 'Please log in.' });

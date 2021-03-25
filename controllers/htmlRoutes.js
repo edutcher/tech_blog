@@ -68,7 +68,33 @@ router.get('/post/:id', async(req, res) => {
         console.log(err);
         res.status(500).json(err);
     }
+})
 
+router.get('/editPost/:id', async(req, res) => {
+    if (!req.session.logged_in) {
+        res.status(400).json({ logged_in: false, message: 'Please log in.' });
+        return;
+    }
+    try {
+        let { id } = req.params;
+        let postData = await Post.findByPk(id);
+
+        if (!postData) res.status(400).json({ message: "No Post Found" });
+
+        const post = postData.get({ plain: true });
+
+        console.log(post);
+
+        res.render('editPost', {
+            post,
+            name: req.session.user_name,
+            title: "Post",
+            logged_in: req.session.logged_in
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
 })
 
 router.get('/newuser', async(req, res) => {

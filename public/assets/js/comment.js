@@ -22,7 +22,6 @@ $(document).ready(() => {
     })
 
     $('#newCommentForm').submit(e => {
-        console.log('hi');
         e.preventDefault();
         if ($('#newComment').val() === '') return;
         addComment();

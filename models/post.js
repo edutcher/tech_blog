@@ -21,6 +21,9 @@ Post.init({
     created_on: {
         type: DataTypes.DATEONLY,
     },
+    updated_on: {
+        type: DataTypes.DATEONLY,
+    },
     user_id: {
         type: DataTypes.INTEGER,
         references: {

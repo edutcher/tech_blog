@@ -9,10 +9,16 @@ let delPost = id => {
         })
 }
 
+
 $(document).ready(() => {
 
     $('.delBtn').click(function() {
         let id = $(this).attr('data-id');
         delPost(id);
+    })
+
+    $('.editBtn').click(function() {
+        let id = $(this).attr('data-id');
+        location.href = `/editPost/${id}`
     })
 })
