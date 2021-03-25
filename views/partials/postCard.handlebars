@@ -5,3 +5,12 @@
     <p class="card-text">{{text}}</p>
   </div>
 </div>
+
+{{#each comments as |comment|}}
+<div class="card" data-id={{id}}>
+    <div class="card-body">
+    <h6 class="card-subtitle mb-2 text-muted">By: {{user.name}}</h6>
+    <p class="card-text">{{text}}</p>
+  </div>
+</div>
+{{/each}}

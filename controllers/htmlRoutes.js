@@ -1,12 +1,12 @@
 const router = require('express').Router();
-const { User, Post } = require('../models');
+const { User, Post, Comment } = require('../models');
 const withAuth = require('../utils/auth');
 
 router.get('/', async(req, res) => {
     try {
         const postData = await Post.findAll({
             include: [{ model: User }],
-            exlclude: ['password'],
+            exclude: ['password'],
         });
 
         const posts = postData.map((post) => post.get({ plain: true }));
@@ -26,7 +26,7 @@ router.get('/dashboard', withAuth, async(req, res) => {
     try {
         const postData = await Post.findAll({
             include: [{ model: User }],
-            exlclude: ['password'],
+            exclude: ['password'],
             where: {
                 user_id: req.session.user_id
             }
@@ -50,8 +50,8 @@ router.get('/dashboard', withAuth, async(req, res) => {
 router.get('/post/:id', async(req, res) => {
     try {
         let postData = await Post.findByPk(req.params.id, {
-            include: [{ model: User }],
-            exlclude: ['password']
+            include: [{ model: User }, { model: Comment, include: { model: User } }],
+            exclude: ['password']
         });
 
         if (!postData) res.status(400).json({ message: "Post not found" });

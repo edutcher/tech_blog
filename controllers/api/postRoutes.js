@@ -4,7 +4,8 @@ const { User, Post, Comment } = require('../../models');
 router.get('/', async(req, res) => {
     try {
         let posts = await Post.findAll({
-            include: [{ model: User }, { model: Comment }]
+            include: [{ model: User }, { model: Comment }],
+            exclude: ['password']
         });
 
         if (!posts) res.status(400).json({ message: "No posts" });
@@ -19,7 +20,10 @@ router.get('/', async(req, res) => {
 router.get('/:id', async(req, res) => {
     try {
         let { id } = req.params;
-        let post = await Post.findByPk(id);
+        let post = await Post.findByPk(id, {
+            include: [{ model: User }, { model: Comment, include: { model: User } }],
+            exclude: ['password']
+        });
 
         if (!post) res.status(400).json({ message: "No post found" });
 
