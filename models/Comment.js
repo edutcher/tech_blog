@@ -13,6 +13,9 @@ Comment.init({
     text: {
         type: DataTypes.TEXT,
         allowNull: false
+    },
+    created_on: {
+        type: DataTypes.DATEONLY,
     }
 }, {
     sequelize,

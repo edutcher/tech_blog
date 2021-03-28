@@ -5,9 +5,14 @@ router.post('/', async(req, res) => {
     try {
         let user = await User.create(req.body);
 
-        req.session.message = "Account Created! Please sign in.";
+        req.session.save(() => {
+            req.session.user_id = user.id;
+            req.session.user_name = user.name;
+            req.session.logged_in = true;
+            req.session.message = undefined;
 
-        res.status(200).json(user);
+            res.status(200).json({ logged_in: true });
+        });
 
     } catch (err) {
         console.log(err);

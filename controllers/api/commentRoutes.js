@@ -8,10 +8,12 @@ router.post('/:id', async(req, res) => {
     }
 
     try {
+        let now = new Date;
         let newComment = {
             text: req.body.comment,
             userId: req.session.user_id,
-            postId: parseInt(req.params.id)
+            postId: parseInt(req.params.id),
+            created_on: now.toISOString()
         }
 
         let comment = await Comment.create(newComment);
